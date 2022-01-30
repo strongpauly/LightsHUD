@@ -150,7 +150,8 @@ class LightsHUD {
       tbutton.removeClass("clickBound");
       tbutton.removeClass("active");
     }
-
+      
+    
     // Enable or disable buttons according to parameters
     function enableButtonsPerSettings() {
 
@@ -158,29 +159,48 @@ class LightsHUD {
       let lantern = game.settings.get('LightsHUD', "lanternType.nameConsumableLantern").toLowerCase();
       let torch = game.settings.get('LightsHUD', "torchType.nameConsumableTorch").toLowerCase();
 
-      let noCheck = game.system.id !== "dnd5e";
-      if (!noCheck) noCheck = !checkAvailability;
-
-      if (noCheck || canCastLight()) {
-        enableLightsHUDButton(tbuttonLight);
-      } else {
-        disableLightsHUDButton(tbuttonLight);
+      turnOffAllLights();
+      disableAllButtons();
+      
+      if (checkAvailability){
+          if (canCastLight())
+            enableLightsHUDButton(tbuttonLight);
+          if (hasItem(lantern))
+            enableLightsHUDButton(tbuttonLantern);
+          if (hasItem(torch))
+            enableLightsHUDButton(tbuttonTorch)
       }
-
-      if (noCheck || hasItem(lantern))
-      {
-        enableLightsHUDButton(tbuttonLantern);
-      } else {
-        disableLightsHUDButton(tbuttonLantern);
+      else{
+        enableAllButtons();
       }
-
-      if (noCheck || hasItem(torch))
-      {
-        enableLightsHUDButton(tbuttonTorch);
-      } else {
-        disableLightsHUDButton(tbuttonTorch);
-      }
+   
     }
+
+    function turnOffAllLights() {
+      torchLight.turnOff(app);
+      lanternLight.turnOff(app);
+      spellLight.turnOff(app);
+    }
+
+    function turnOnAllLights() {
+      torchLight.turnOn(app);
+      lanternLight.turnOn(app);
+      spellLight.turnOn(app);
+
+    }
+
+    function disableAllButtons(){
+      disableLightsHUDButton(tbuttonLantern);
+      disableLightsHUDButton(tbuttonLight);
+      disableLightsHUDButton(tbuttonTorch);
+    }
+
+    function enableAllButtons(){
+      enableLightsHUDButton(tbuttonLantern);
+      enableLightsHUDButton(tbuttonLight);
+      enableLightsHUDButton(tbuttonTorch);
+    }
+
 
     async function onButtonClick(ev, tbutton) {
       ev.preventDefault();
@@ -1135,7 +1155,7 @@ Hooks.once("init", () => {
     default: true,
     type: Boolean,
   });
-  if (game.system.id === "dnd5e") {
+  //if (game.system.id === "dnd5e") {
     game.settings.register("LightsHUD", "checkAvailability", {
       name: game.i18n.localize("LightsHUD.checkAvailability.name"),
       hint: game.i18n.localize("LightsHUD.checkAvailability.hint"),
@@ -1180,8 +1200,16 @@ Hooks.once("init", () => {
   //     default: false,
   //     type: Boolean,
   //   });
-  }
+ // }
   // Light Parameters
+  game.settings.register("LightsHUD", "lightData", {
+    name: "LightData",
+    hint: "LightData",
+    scope: "world",
+    config: true,
+    default: 20,
+    type: lightData,
+  });
   game.settings.register("LightsHUD", "lightBrightRadius", {
     name: game.i18n.localize("LightsHUD.lightBrightRadius.name"),
     hint: game.i18n.localize("LightsHUD.lightBrightRadius.hint"),

@@ -1,14 +1,19 @@
-export class LightDataExt extends foundry.data.LightData {
+export class LightDataExt {
   name;
   tokenID;
   type;
   state;
+  newToken;
+  originalLightObject;
+  currentLightObject;
+  settingsLightObject;
 
   constructor(name, type, state, app) {
-    super();
     this.name = name ?? "SampleName";
     this.type = type ?? "LightType";
     this.state = state ?? "false";
+    this.newToken = true;
+    this.settingsLightObject = this.getLightObjectFromSettings() ?? {};
     this.tokenID = app.object.id;
     this._initFlag(app);
   };
@@ -22,24 +27,33 @@ export class LightDataExt extends foundry.data.LightData {
     return this.name + this.type + "state";
   };
 
-  // async turnOff() {
-  //   this.state = false;
-  //   await game.actor.setFlag("LightsHUD", _getFlagName(), false);
-  //   tbuttonLantern.removeClass("active");
-  //   // Lantern is inactive, enable the relevant light sources according to parameters
-  //   enableRelevantButtons();
-  //   // Restore the initial light source
-  //   updateTokenLighting(
-  //     tokenD.getFlag("LightsHUD", "InitialBrightRadius"),
-  //     tokenD.getFlag("LightsHUD", "InitialDimRadius"),
-  //     tokenD.getFlag("LightsHUD", "InitialLightColor"),
-  //     tokenD.getFlag("LightsHUD", "InitialColorIntensity"),
-  //     tokenD.getFlag("LightsHUD", "Initiallight.angle"),
-  //     tokenD.getFlag("LightsHUD", "InitialAnimationType"),
-  //     tokenD.getFlag("LightsHUD", "InitialAnimationSpeed"),
-  //     tokenD.getFlag("LightsHUD", "InitialAnimationIntensity")
-  //   );
-  // }
+  async turnOn(app){
+    this.state = true;
+    await app.object.document.setFlag("LightsHUD",this._getFlagName(),this.state);
+  }
+
+  async turnOff(app){
+    this.state = false;
+    await app.object.document.setFlag("LightsHUD",this._getFlagName(),this.state);
+  }
+
+  storeLightObject(){
+    //Store Light Object as flag on token.
+  }
+
+  restoreLightObject(){
+    //Restore Stored Light object from flags
+  }
+  getLightObjectFromSettings(){
+    //Get Light object from the settings
+    if (this.newToken === undefined || this.newToken === true){
+      this.settingsLightObject = game.settings.get("LightsHUD", "lightData") ?? new LightData();
+      this.newToken = false ?? false;
+    }
+      console.log(this.settingsLightObject);
+  }
+
+ 
 }
 
 
