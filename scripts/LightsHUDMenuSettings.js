@@ -1,9 +1,6 @@
 // Setting Menu for the custom lightData values.
 export class LightsHUDMenuSettings extends FormApplication {
-    Sup;
-
     
-
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.id = "LightsHUD Custom values";
@@ -21,16 +18,19 @@ export class LightsHUDMenuSettings extends FormApplication {
       }
 
     getData() {
-        this.Sup = super.getData();
-        return super.getData();
+        let sData = super.getData();
+        let LightDataObject = game.settings.get("LightsHUD", "lightspell");
+
+
+        if (typeof LightDataObject !== "LightData") {
+            LightDataObject =  new foundry.data.LightData();
+        }
+
+        return {sData,LightDataObject};
     }
     
-    _updateObject(event, formData) {
-        const data = expandObject(formData);
-        game.settings.set("LightsHUD", "lightspell" , this.LDO);
+    _updateObject(event, CustomLightData) {
+        const data = expandObject(CustomLightData);
+        game.settings.set("LightsHUD", "lightspell" , data);
     }
-
-    
-
-
 }

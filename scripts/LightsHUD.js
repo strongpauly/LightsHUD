@@ -941,8 +941,8 @@ Hooks.once("init", async () => {
 
   
   // Light Parameters
-  game.settings.registerMenu("LightsHUD", "lightSpellSubMenu", {
-    name: "LightTypeSpell",
+  game.settings.registerMenu("LightsHUD", "lightspellSubmenu", {
+    name: "Spell Light",
     label: "Spell-Type Light Settings",
     hint: "Customize the Light Spell HUD Button",
     icon: "fas fa-bars",
@@ -954,359 +954,47 @@ Hooks.once("init", async () => {
     name: game.i18n.localize("LightsHUD.lightBrightRadius.name"),
     hint: game.i18n.localize("LightsHUD.lightBrightRadius.hint"),
     scope: "world",
-    config: true,
+    config: false,
     default: {},
     type: Object,
   });
 
-
-  game.settings.register("LightsHUD", "lightDimRadius", {
-    name: game.i18n.localize("LightsHUD.lightDimRadius.name"),
-    hint: game.i18n.localize("LightsHUD.lightDimRadius.hint"),
-    scope: "world",
-    config: true,
-    default: 40,
-    type: Number,
-  });
-  game.settings.register("LightsHUD", "lightType", {
-    name: game.i18n.localize("LightsHUD.lightType.name"),
-    hint: game.i18n.localize("LightsHUD.lightType.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "Type1",
-    choices: {
-      Type0: game.i18n.localize("LightsHUD.lightType.type0"),
-      Type1: game.i18n.localize("LightsHUD.lightType.type1"),
-      Type2: game.i18n.localize("LightsHUD.lightType.type2"),
-      Type3: game.i18n.localize("LightsHUD.lightType.type3"),
-      Type4: game.i18n.localize("LightsHUD.lightType.type4"),
-      Type5: game.i18n.localize("LightsHUD.lightType.type5"),
-      Type6: game.i18n.localize("LightsHUD.lightType.type6"),
-      Type7: game.i18n.localize("LightsHUD.lightType.type7"),
-      Type8: game.i18n.localize("LightsHUD.lightType.type8"),
-      Type9: game.i18n.localize("LightsHUD.lightType.type9"),
-      Type10: game.i18n.localize("LightsHUD.lightType.type10"),
-      Type11: game.i18n.localize("LightsHUD.lightType.type11"),
-      Type12: game.i18n.localize("LightsHUD.lightType.type12"),
-      Type13: game.i18n.localize("LightsHUD.lightType.type13"),
-      Type14: game.i18n.localize("LightsHUD.lightType.type14"),
-      Type15: game.i18n.localize("LightsHUD.lightType.type15"),
-      TypeC: game.i18n.localize("LightsHUD.lightType.typeC"),
-    },
-  });
-  game.settings.register("LightsHUD", "customLightColor", {
-    name: game.i18n.localize("LightsHUD.lightType.customColor.name"),
-    hint: game.i18n.localize("LightsHUD.lightType.customColor.hint"),
-    scope: "world",
-    config: true,
-    restricted: false,
-    type: String,
-    default: "#a2642a",
-  });
-  game.settings.register("LightsHUD", "customLightColorIntensity", {
-    name: game.i18n.localize("LightsHUD.lightType.customIntensity.name"),
-    hint: game.i18n.localize("LightsHUD.lightType.customIntensity.hint"),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 0.5,
-    range: {
-      min: 0.0,
-      step: 0.05,
-      max: 1,
-    },
-  });
-  game.settings.register("LightsHUD", "customlight.animationType", {
-    name: game.i18n.localize("LightsHUD.lightType.customAnimationType.name"),
-    hint: game.i18n.localize("LightsHUD.lightType.customAnimationType.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "none",
-    choices: {
-      none: game.i18n.localize("LightsHUD.animationType.none"),
-      torch: game.i18n.localize("LightsHUD.animationType.torch"),
-      pulse: game.i18n.localize("LightsHUD.animationType.pulse"),
-      chroma: game.i18n.localize("LightsHUD.animationType.chroma"),
-      wave: game.i18n.localize("LightsHUD.animationType.wave"),
-      fog: game.i18n.localize("LightsHUD.animationType.fog"),
-      sunburst: game.i18n.localize("LightsHUD.animationType.sunburst"),
-      dome: game.i18n.localize("LightsHUD.animationType.dome"),
-      emanation: game.i18n.localize("LightsHUD.animationType.emanation"),
-      hexa: game.i18n.localize("LightsHUD.animationType.hexa"),
-      ghost: game.i18n.localize("LightsHUD.animationType.ghost"),
-      energy: game.i18n.localize("LightsHUD.animationType.energy"),
-      roiling: game.i18n.localize("LightsHUD.animationType.roiling"),
-      hole: game.i18n.localize("LightsHUD.animationType.hole"),
-    },
-  });
-  game.settings.register("LightsHUD", "customlight.animationSpeed", {
-    name: game.i18n.localize("LightsHUD.lightType.customAnimationSpeed.name"),
-    hint: game.i18n.localize("LightsHUD.lightType.customAnimationSpeed.hint"),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      step: 1,
-      max: 10,
-    },
-  });
-  game.settings.register("LightsHUD", "customlight.animationIntensity", {
-    name: game.i18n.localize(
-      "LightsHUD.lightType.customAnimationIntensity.name"
-    ),
-    hint: game.i18n.localize(
-      "LightsHUD.lightType.customAnimationIntensity.hint"
-    ),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      step: 1,
-      max: 10,
-    },
-  });
   // Lantern Parameters
-  game.settings.register("LightsHUD", "lanternBrightRadius", {
-    name: game.i18n.localize("LightsHUD.lanternBrightRadius.name"),
-    hint: game.i18n.localize("LightsHUD.lanternBrightRadius.hint"),
-    scope: "world",
-    config: true,
-    default: 20,
-    type: Number,
+  game.settings.registerMenu("LightsHUD", "LanternSubmenu", {
+    name: "Lantern Light",
+    label: "Lantern-Type Light Settings",
+    hint: "Customize the Lantern Spell HUD Button",
+    icon: "fas fa-bars",
+    type: LightsHUDMenuSettings,
+    restricted: true
   });
-  game.settings.register("LightsHUD", "lanternDimRadius", {
-    name: game.i18n.localize("LightsHUD.lanternDimRadius.name"),
-    hint: game.i18n.localize("LightsHUD.lanternDimRadius.hint"),
+
+  await game.settings.register("LightsHUD", "lanternLight", {
+    name: game.i18n.localize("LightsHUD.lightBrightRadius.name"),
+    hint: game.i18n.localize("LightsHUD.lightBrightRadius.hint"),
     scope: "world",
-    config: true,
-    default: 40,
-    type: Number,
+    config: false,
+    default: {},
+    type: Object,
   });
-  game.settings.register("LightsHUD", "lanternType", {
-    name: game.i18n.localize("LightsHUD.lanternType.name"),
-    hint: game.i18n.localize("LightsHUD.lanternType.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "Type1",
-    choices: {
-      Type0: game.i18n.localize("LightsHUD.lanternType.type0"),
-      Type1: game.i18n.localize("LightsHUD.lanternType.type1"),
-      Type2: game.i18n.localize("LightsHUD.lanternType.type2"),
-      Type3: game.i18n.localize("LightsHUD.lanternType.type3"),
-      Type4: game.i18n.localize("LightsHUD.lanternType.type4"),
-      Type5: game.i18n.localize("LightsHUD.lanternType.type5"),
-      Type6: game.i18n.localize("LightsHUD.lanternType.type6"),
-      Type7: game.i18n.localize("LightsHUD.lanternType.type7"),
-      Type8: game.i18n.localize("LightsHUD.lanternType.type8"),
-      Type9: game.i18n.localize("LightsHUD.lanternType.type9"),
-      TypeC: game.i18n.localize("LightsHUD.lanternType.typeC"),
-    },
+
+  // Light Parameters
+  game.settings.registerMenu("LightsHUD", "torchSubmenu", {
+    name: "Torch Light",
+    label: "Torch-Type Light Settings",
+    hint: "Customize the Torch Spell HUD Button",
+    icon: "fas fa-bars",
+    type: LightsHUDMenuSettings,
+    restricted: true
   });
-  game.settings.register("LightsHUD", "customLanternColor", {
-    name: game.i18n.localize("LightsHUD.lanternType.customColor.name"),
-    hint: game.i18n.localize("LightsHUD.lanternType.customColor.hint"),
+
+  await game.settings.register("LightsHUD", "torchLight", {
+    name: game.i18n.localize("LightsHUD.lightBrightRadius.name"),
+    hint: game.i18n.localize("LightsHUD.lightBrightRadius.hint"),
     scope: "world",
-    config: true,
-    restricted: false,
-    type: String,
-    default: "#a2642a",
-  });
-  game.settings.register("LightsHUD", "customLanternColorIntensity", {
-    name: game.i18n.localize("LightsHUD.lanternType.customIntensity.name"),
-    hint: game.i18n.localize("LightsHUD.lanternType.customIntensity.hint"),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 0.5,
-    range: {
-      min: 0.0,
-      step: 0.05,
-      max: 1,
-    },
-  });
-  game.settings.register("LightsHUD", "customLanternAnimationType", {
-    name: game.i18n.localize("LightsHUD.lanternType.customAnimationType.name"),
-    hint: game.i18n.localize("LightsHUD.lanternType.customAnimationType.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "none",
-    choices: {
-      none: game.i18n.localize("LightsHUD.animationType.none"),
-      torch: game.i18n.localize("LightsHUD.animationType.torch"),
-      pulse: game.i18n.localize("LightsHUD.animationType.pulse"),
-      chroma: game.i18n.localize("LightsHUD.animationType.chroma"),
-      wave: game.i18n.localize("LightsHUD.animationType.wave"),
-      fog: game.i18n.localize("LightsHUD.animationType.fog"),
-      sunburst: game.i18n.localize("LightsHUD.animationType.sunburst"),
-      dome: game.i18n.localize("LightsHUD.animationType.dome"),
-      emanation: game.i18n.localize("LightsHUD.animationType.emanation"),
-      hexa: game.i18n.localize("LightsHUD.animationType.hexa"),
-      ghost: game.i18n.localize("LightsHUD.animationType.ghost"),
-      energy: game.i18n.localize("LightsHUD.animationType.energy"),
-      roiling: game.i18n.localize("LightsHUD.animationType.roiling"),
-      hole: game.i18n.localize("LightsHUD.animationType.hole"),
-    },
-  });
-  game.settings.register("LightsHUD", "customLanternAnimationSpeed", {
-    name: game.i18n.localize("LightsHUD.lanternType.customAnimationSpeed.name"),
-    hint: game.i18n.localize("LightsHUD.lanternType.customAnimationSpeed.hint"),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      step: 1,
-      max: 10,
-    },
-  });
-  game.settings.register("LightsHUD", "customLanternAnimationIntensity", {
-    name: game.i18n.localize(
-      "LightsHUD.lanternType.customAnimationIntensity.name"
-    ),
-    hint: game.i18n.localize(
-      "LightsHUD.lanternType.customAnimationIntensity.hint"
-    ),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      step: 1,
-      max: 10,
-    },
-  });
-  // Torch Parameters
-  game.settings.register("LightsHUD", "torchBrightRadius", {
-    name: game.i18n.localize("LightsHUD.torchBrightRadius.name"),
-    hint: game.i18n.localize("LightsHUD.torchBrightRadius.hint"),
-    scope: "world",
-    config: true,
-    default: 20,
-    type: Number,
-  });
-  game.settings.register("LightsHUD", "torchDimRadius", {
-    name: game.i18n.localize("LightsHUD.torchDimRadius.name"),
-    hint: game.i18n.localize("LightsHUD.torchDimRadius.hint"),
-    scope: "world",
-    config: true,
-    default: 40,
-    type: Number,
-  });
-  game.settings.register("LightsHUD", "torchType", {
-    name: game.i18n.localize("LightsHUD.torchType.name"),
-    hint: game.i18n.localize("LightsHUD.torchType.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "Type1",
-    choices: {
-      Type0: game.i18n.localize("LightsHUD.torchType.type0"),
-      Type1: game.i18n.localize("LightsHUD.torchType.type1"),
-      Type2: game.i18n.localize("LightsHUD.torchType.type2"),
-      Type3: game.i18n.localize("LightsHUD.torchType.type3"),
-      Type4: game.i18n.localize("LightsHUD.torchType.type4"),
-      Type5: game.i18n.localize("LightsHUD.torchType.type5"),
-      Type6: game.i18n.localize("LightsHUD.torchType.type6"),
-      Type7: game.i18n.localize("LightsHUD.torchType.type7"),
-      Type8: game.i18n.localize("LightsHUD.torchType.type8"),
-      Type9: game.i18n.localize("LightsHUD.torchType.type9"),
-      TypeC: game.i18n.localize("LightsHUD.torchType.typeC"),
-    },
-  });
-  game.settings.register("LightsHUD", "customTorchColor", {
-    name: game.i18n.localize("LightsHUD.torchType.customColor.name"),
-    hint: game.i18n.localize("LightsHUD.torchType.customColor.hint"),
-    scope: "world",
-    config: true,
-    restricted: false,
-    type: String,
-    default: "#a2642a",
-  });
-  game.settings.register("LightsHUD", "customTorchColorIntensity", {
-    name: game.i18n.localize("LightsHUD.torchType.customIntensity.name"),
-    hint: game.i18n.localize("LightsHUD.torchType.customIntensity.hint"),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 0.5,
-    range: {
-      min: 0.0,
-      step: 0.05,
-      max: 1,
-    },
-  });
-  game.settings.register("LightsHUD", "customTorchAnimationType", {
-    name: game.i18n.localize("LightsHUD.torchType.customAnimationType.name"),
-    hint: game.i18n.localize("LightsHUD.torchType.customAnimationType.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "none",
-    choices: {
-      none: game.i18n.localize("LightsHUD.animationType.none"),
-      torch: game.i18n.localize("LightsHUD.animationType.torch"),
-      pulse: game.i18n.localize("LightsHUD.animationType.pulse"),
-      chroma: game.i18n.localize("LightsHUD.animationType.chroma"),
-      wave: game.i18n.localize("LightsHUD.animationType.wave"),
-      fog: game.i18n.localize("LightsHUD.animationType.fog"),
-      sunburst: game.i18n.localize("LightsHUD.animationType.sunburst"),
-      dome: game.i18n.localize("LightsHUD.animationType.dome"),
-      emanation: game.i18n.localize("LightsHUD.animationType.emanation"),
-      hexa: game.i18n.localize("LightsHUD.animationType.hexa"),
-      ghost: game.i18n.localize("LightsHUD.animationType.ghost"),
-      energy: game.i18n.localize("LightsHUD.animationType.energy"),
-      roiling: game.i18n.localize("LightsHUD.animationType.roiling"),
-      hole: game.i18n.localize("LightsHUD.animationType.hole"),
-    },
-  });
-  game.settings.register("LightsHUD", "customTorchAnimationSpeed", {
-    name: game.i18n.localize("LightsHUD.torchType.customAnimationSpeed.name"),
-    hint: game.i18n.localize("LightsHUD.torchType.customAnimationSpeed.hint"),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      step: 1,
-      max: 10,
-    },
-  });
-  game.settings.register("LightsHUD", "customTorchAnimationIntensity", {
-    name: game.i18n.localize(
-      "LightsHUD.torchType.customAnimationIntensity.name"
-    ),
-    hint: game.i18n.localize(
-      "LightsHUD.torchType.customAnimationIntensity.hint"
-    ),
-    scope: "world",
-    config: true,
-    restricted: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      step: 1,
-      max: 10,
-    },
+    config: false,
+    default: {},
+    type: Object,
   });
 
   game.settings.register("LightsHUD", "debug", {
