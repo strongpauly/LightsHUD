@@ -1,4 +1,4 @@
-
+// Setting Menu for the custom lightData values.
 export class LightsHUDMenuSettings extends FormApplication {
     Sup;
 
