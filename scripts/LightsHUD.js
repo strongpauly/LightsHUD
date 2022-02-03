@@ -1,6 +1,7 @@
 import { LightDataExt } from "./LightDataExt.js";
+// import { LightData } from foundry.data.LightData;
 import { tokenInformations } from "./tokenInformations.js";
-
+import { LightsHUDMenuSettings } from "./LightsHUDMenuSettings.js";
 class LightsHUD {
  
   static clBanner() {
@@ -201,6 +202,7 @@ class LightsHUD {
       if (tbutton.hasClass("lightSpell")) {
         // Check if the token has the light spell on
         if (spellLight.state) {
+          LightsHUD.log("Turn Off")
           // The token has the light spell on
           spellLight.state = false;
           await tokenD.setFlag("LightsHUD", spellLight._getFlagName(), false);
@@ -209,17 +211,9 @@ class LightsHUD {
           enableButtonsPerSettings();
 
           // Restore the initial light source
-          updateTokenLighting(
-            tokenD.getFlag("LightsHUD", "InitialBrightRadius"),
-            tokenD.getFlag("LightsHUD", "InitialDimRadius"),
-            tokenD.getFlag("LightsHUD", "InitialLightColor"),
-            tokenD.getFlag("LightsHUD", "InitialColorIntensity"),
-            tokenD.getFlag("LightsHUD", "Initiallight.angle"),
-            tokenD.getFlag("LightsHUD", "InitialAnimationType"),
-            tokenD.getFlag("LightsHUD", "InitialAnimationSpeed"),
-            tokenD.getFlag("LightsHUD", "InitialAnimationIntensity")
-          );
+          updateTokenLighting(tokenD.getFlag("LightsHUD", "previousLightData"));
         } else {
+          LightsHUD.log("Turn On")
           // The token does not have the light spell on
           spellLight.state = true;
           await tokenD.setFlag("LightsHUD", spellLight._getFlagName(), true);
@@ -232,216 +226,10 @@ class LightsHUD {
           // Enable the Light Source according to the type
           // "torch" / "pulse" / "chroma" / "wave" / "fog" / "sunburst" / "dome"
           // "emanation" / "hexa" / "ghost" / "energy" / "roiling" / "hole"
-          let nBright = game.settings.get("LightsHUD", "lightBrightRadius");
-          let nDim = game.settings.get("LightsHUD", "lightDimRadius");
-          let nType = game.settings.get("LightsHUD", "lightType");
-          switch (nType) {
-            case "Type0":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ffffff",
-                0.5,
-                360,
-                "none",
-                5,
-                5
-              );
-              break;
-            case "Type1":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ffffff",
-                0.5,
-                360,
-                "torch",
-                5,
-                5
-              );
-              break;
-            case "Type2":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ffffff",
-                0.5,
-                360,
-                "chroma",
-                5,
-                5
-              );
-              break;
-            case "Type3":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ffffff",
-                0.5,
-                360,
-                "pulse",
-                5,
-                5
-              );
-              break;
-            case "Type4":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ffffff",
-                0.5,
-                360,
-                "ghost",
-                5,
-                5
-              );
-              break;
-            case "Type5":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ffffff",
-                0.5,
-                360,
-                "emanation",
-                5,
-                5
-              );
-              break;
-            case "Type6":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ff0000",
-                0.5,
-                360,
-                "torch",
-                5,
-                5
-              );
-              break;
-            case "Type7":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ff0000",
-                0.5,
-                360,
-                "chroma",
-                5,
-                5
-              );
-              break;
-            case "Type8":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ff0000",
-                0.5,
-                360,
-                "pulse",
-                5,
-                5
-              );
-              break;
-            case "Type9":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ff0000",
-                0.5,
-                360,
-                "ghost",
-                5,
-                5
-              );
-              break;
-            case "Type10":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#ff0000",
-                0.5,
-                360,
-                "emanation",
-                5,
-                5
-              );
-              break;
-            case "Type11":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#00ff00",
-                0.5,
-                360,
-                "torch",
-                5,
-                5
-              );
-              break;
-            case "Type12":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#00ff00",
-                0.5,
-                360,
-                "chroma",
-                5,
-                5
-              );
-              break;
-            case "Type13":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#00ff00",
-                0.5,
-                360,
-                "pulse",
-                5,
-                5
-              );
-              break;
-            case "Type14":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#00ff00",
-                0.5,
-                360,
-                "ghost",
-                5,
-                5
-              );
-              break;
-            case "Type15":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                "#00ff00",
-                0.5,
-                360,
-                "emanation",
-                5,
-                5
-              );
-              break;
-            case "TypeC":
-              updateTokenLighting(
-                nBright,
-                nDim,
-                game.settings.get("LightsHUD", "customLightColor"),
-                game.settings.get("LightsHUD", "customLightColorIntensity"),
-                360,
-                game.settings.get("LightsHUD", "customlight.animationType"),
-                game.settings.get("LightsHUD", "customlight.animationSpeed"),
-                game.settings.get("LightsHUD", "customlight.animationIntensity")
-              );
-              break;
+          
+          let lightDataObject = tokenD.getFlag("LightsHUD","previousLightData") ?? LightsHUD.getLightDataFromSettings("lightspell");
+          updateTokenLighting(lightDataObject);
           }
-        }
       }
       if (tbutton.hasClass("lantern")) { 
         let consumable = game.settings.get("LightsHUD","lanternType.nameConsumableLantern").toLowerCase() ?? false;
@@ -938,98 +726,60 @@ class LightsHUD {
                   break;
                 }
               }
-            }
+      }
     }
       
     
     
     // Update the relevant light parameters of a token
-    function updateTokenLighting(
-      bright,
-      dim,
-      lightColor,
-      colorIntensity,
-      angle,
-      animationType,
-      animationSpeed,
-      animationIntensity
-    ) {
-      app.object.document.update({
-        light: {
-          bright: bright,
-          dim: dim,
-          alpha: colorIntensity ** 2,
-          color: lightColor,
-          angle: angle,
-          animation: {
-            type: animationType,
-            speed: animationSpeed,
-            intensity: animationIntensity,
-          },
-        },
-      });
+    function updateTokenLighting(lightDataObject){
+      app.object.document.update({lightData:{lightDataObject}});
+      LightsHUD.log("Update token with LightData")
+      LightsHUD.log(lightDataObject)
     }
+
+    // function updateTokenLighting(
+    //   bright,
+    //   dim,
+    //   lightColor,
+    //   colorIntensity,
+    //   angle,
+    //   animationType,
+    //   animationSpeed,
+    //   animationIntensity
+    // ) {
+    //   app.object.document.update({
+    //     light: {
+    //       bright: bright,
+    //       dim: dim,
+    //       alpha: colorIntensity ** 2,
+    //       color: lightColor,
+    //       angle: angle,
+    //       animation: {
+    //         type: animationType,
+    //         speed: animationSpeed,
+    //         intensity: animationIntensity,
+    //       },
+    //     },
+    //   });
+    // }
+
     // Store the initial status of illumination for the token to restore if all light sources are extinguished
     async function storeTokenLighting() {
+
+      //let myLightObject = new foundry.data.LightData();
+      let myLightObject = app.object.data.light;
+      
       let promises = [];
       const tokenData = app.object.data;
       const tokenFlags = app.object.document;
-      promises.push(
-        tokenFlags.setFlag(
+      await tokenFlags.setFlag(
           "LightsHUD",
-          "InitialBrightRadius",
-          tokenData.light.bright
-        )
-      );
-      promises.push(
-        tokenFlags.setFlag("LightsHUD", "InitialDimRadius", tokenData.light.dim)
-      );
-      promises.push(
-        tokenFlags.setFlag(
-          "LightsHUD",
-          "InitialLightColor",
-          tokenData.lightColor
-            ? tokenData.lightColor.toString(16).padStart(6, 0)
-            : null
-        )
-      );
-      promises.push(
-        tokenFlags.setFlag(
-          "LightsHUD",
-          "InitialColorIntensity",
-          Math.sqrt(tokenData.lightAlpha)
-        )
-      );
-      promises.push(
-        tokenFlags.setFlag(
-          "LightsHUD",
-          "Initiallight.angle",
-          tokenData.light.angle
-        )
-      );
-      promises.push(
-        tokenFlags.setFlag(
-          "LightsHUD",
-          "InitialAnimationType",
-          tokenData.light.animation.type ?? null
-        )
-      );
-      promises.push(
-        tokenFlags.setFlag(
-          "LightsHUD",
-          "InitialAnimationSpeed",
-          tokenData.light.animation.speed
-        )
-      );
-      promises.push(
-        tokenFlags.setFlag(
-          "LightsHUD",
-          "InitialAnimationIntensity",
-          tokenData.light.animation.intensity
-        )
-      );
-
-      return Promise.all(promises);
+          "previousLightData",
+           myLightObject
+        );
+        LightsHUD.log("store LightData")
+        LightsHUD.log(myLightObject)
     }
     /*
      * Returns the first GM id.
@@ -1063,6 +813,11 @@ class LightsHUD {
     html.find(".col.LightsHUD-column-" + position).prepend(tbuttonTorch);
     html.find(".col.LightsHUD-column-" + position).prepend(tbuttonLantern);
     html.find(".col.LightsHUD-column-" + position).prepend(tbuttonLight);
+  }
+
+  static getLightDataFromSettings(lightType) {
+    let lightDataObject = game.settings.get("LightsHUD",lightType) ?? new foundry.data.LightData();
+    return lightDataObject ;
   }
 
   static log(data) {
@@ -1122,7 +877,7 @@ Hooks.on("ready", () => {
     LightsHUD.handleSocketRequest(request);
   });
 });
-Hooks.once("init", () => {
+Hooks.once("init", async () => {
   game.settings.register("LightsHUD", "position", {
     name: game.i18n.localize("LightsHUD.position.name"),
     hint: game.i18n.localize("LightsHUD.position.hint"),
@@ -1186,14 +941,25 @@ Hooks.once("init", () => {
 
   
   // Light Parameters
-  game.settings.register("LightsHUD", "lightBrightRadius", {
+  game.settings.registerMenu("LightsHUD", "lightSpellSubMenu", {
+    name: "LightTypeSpell",
+    label: "Spell-Type Light Settings",
+    hint: "Customize the Light Spell HUD Button",
+    icon: "fas fa-bars",
+    type: LightsHUDMenuSettings,
+    restricted: true
+  });
+
+  await game.settings.register("LightsHUD", "lightspell", {
     name: game.i18n.localize("LightsHUD.lightBrightRadius.name"),
     hint: game.i18n.localize("LightsHUD.lightBrightRadius.hint"),
     scope: "world",
     config: true,
-    default: 20,
-    type: Number,
+    default: {},
+    type: Object,
   });
+
+
   game.settings.register("LightsHUD", "lightDimRadius", {
     name: game.i18n.localize("LightsHUD.lightDimRadius.name"),
     hint: game.i18n.localize("LightsHUD.lightDimRadius.hint"),

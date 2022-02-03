@@ -1,0 +1,12 @@
+<form id="Custom Light Data" autocomplete="off" onsubmit="event.preventDefault();">
+    <div class="form-group">
+    <p>LightData Values</p>
+    {{#each LDO as |key value |}}
+        {{key}} <input type=text value="{{value}}">
+    {{/each}}
+    </div>
+    <div class='flexrow'>    
+        <button class='reset' type="reset"><i class="fas fa-trash-restore"></i>Reset</button>
+        <button class='submit' type="submit"><i class="fas fa-check"></i>Submit</button>
+    </div>
+</form>
