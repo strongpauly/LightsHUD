@@ -1,7 +1,7 @@
 import { LightDataExt } from "./LightDataExt.js";
 // import { LightData } from foundry.data.LightData;
 import { tokenInformations } from "./tokenInformations.js";
-import { LightsHUDMenuSettings } from "./LightsHUDMenuSettings.js";
+import * as LightsHUDSubs from "./LightsHUDMenuSettings.js";
 class LightsHUD {
  
   static clBanner() {
@@ -769,9 +769,6 @@ class LightsHUD {
 
       //let myLightObject = new foundry.data.LightData();
       let myLightObject = app.object.data.light;
-      
-      let promises = [];
-      const tokenData = app.object.data;
       const tokenFlags = app.object.document;
       await tokenFlags.setFlag(
           "LightsHUD",
@@ -780,6 +777,7 @@ class LightsHUD {
         );
         LightsHUD.log("store LightData")
         LightsHUD.log(myLightObject)
+        LightsHUD.log(tokenFlags.getFlag("LightsHUD", "previousLightData"));
     }
     /*
      * Returns the first GM id.
@@ -873,6 +871,7 @@ Hooks.on("ready", () => {
           "</div></li></ol>"
       );
   });
+
   game.socket.on("module.torch", (request) => {
     LightsHUD.handleSocketRequest(request);
   });
@@ -946,7 +945,7 @@ Hooks.once("init", async () => {
     label: "Spell-Type Light Settings",
     hint: "Customize the Light Spell HUD Button",
     icon: "fas fa-bars",
-    type: LightsHUDMenuSettings,
+    type: LightsHUDSubs.LightSub,
     restricted: true
   });
 
@@ -965,7 +964,7 @@ Hooks.once("init", async () => {
     label: "Lantern-Type Light Settings",
     hint: "Customize the Lantern Spell HUD Button",
     icon: "fas fa-bars",
-    type: LightsHUDMenuSettings,
+    type: LightsHUDSubs.LanternSub,
     restricted: true
   });
 
@@ -984,7 +983,7 @@ Hooks.once("init", async () => {
     label: "Torch-Type Light Settings",
     hint: "Customize the Torch Spell HUD Button",
     icon: "fas fa-bars",
-    type: LightsHUDMenuSettings,
+    type: LightsHUDSubs.TorchSub,
     restricted: true
   });
 

@@ -1,34 +1,32 @@
-<form id="CustomLightData" autocomplete="off" onsubmit="event.preventDefault();">
-    <div class="form-group rootValue">
-        LightData Values
-        <p>
+<form id="CustomLightData" name="CustomLightData" autocomplete="off" onsubmit="event.preventDefault();">
+    <div class="flexcol flex0">
+        <h3>LightData Values<h3>
             {{#each this.LightDataObject as |value key|}}
-                {{#if value }}
-                    {{key}} <input name="{{key}}" type=text value="{{value}}">
-                {{/if}}
+            <label for="{{key}}">{{key}}</label> <input class="line" name="{{key}}" type=text value="{{value}}">
             {{/each}}
         </p>
     </div>
-    <div class="form-group nestedValue">
-        Animation Values
-        <p>
-            {{#each this.LightDataObject.animation as |value key|}}
-                {{key}} <input name="{{key}}" type=text value="{{value}}">
+    <div class="flexcol flex1">
+        <form name="animation" id="animation">
+        <fieldset>
+        <legend>Animation</legend>
+            {{#each this.animation as |value key|}}
+               <label for="{{key}}">{{key}}</label> <input class="line" name="{{key}}" type=text value="{{value}}">
             {{/each}}
-    </p>
+        </fieldset>
+        </form>
     </div>
-    <div class="form-group nestedValue">
-        Darkness Values
-        <p>
-            {{#each this.LightDataObject.darkness as |value key|}}
-                {{key}} <input name="{{key}}" type=text value="{{value}}">
+    <div class="flexcol flex1">
+        <form name="darkness" id="darkness">
+        <fieldset>
+            <legend>Darkness</legend>
+            {{#each this.darkness as |value key|}}
+                 <label for="{{key}}">{{key}}</label><input class="line" name="{{key}}" type=text value="{{value}}">
             {{/each}}
-        </p>
+        </fieldset></form>
     </div>
-    
-
     <div class='flexrow'>    
-        <button class='reset' type="reset"><i class="fas fa-trash-restore"></i>Reset</button>
-        <button class='submit' type="submit"><i class="fas fa-check"></i>Submit</button>
+        <button class='reset' type="reset" data-action="reset"><i class="fas fa-trash-restore"></i>Reset</button>
+        <button class='submit' type="submit" data-action="submit"><i class="fas fa-check"></i>Submit</button>
     </div>
 </form>
