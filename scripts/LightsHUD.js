@@ -855,8 +855,13 @@ class LightsHUD {
   }
 }
 
+Hooks.once('ready', () => {
+  try{window.Ardittristan.ColorSetting.tester} catch {
+      ui.notifications.notify('Please make sure you have the "lib - ColorSettings" module installed and enabled.', "error");
+  }
+});
 Hooks.on("ready", () => {
-  Hooks.on("renderTokenHUD", (app, html, data) => {
+   Hooks.on("renderTokenHUD", (app, html, data) => {
     LightsHUD.addLightsHUDButtons(app, html, data);
   });
   Hooks.on("renderControlsReference", (app, html, data) => {

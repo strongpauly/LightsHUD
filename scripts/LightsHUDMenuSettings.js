@@ -1,11 +1,15 @@
 // Setting Menu for the custom lightData values.
+import { LightsHUDConsts } from "./consts.js"
 export class LightsHUDMenuSettings extends FormApplication {
+    
     lightType;
-    
-    
+    LHCONSTS = new LightsHUDConsts();
+    //TODO Add colorPicker
+
     constructor(lightType){
         super();
         this.lightType = lightType ?? "";
+        console.clear();
     }
 
     static get defaultOptions() {
@@ -37,58 +41,55 @@ export class LightsHUDMenuSettings extends FormApplication {
 
     ///** @override */
     getData() {
-        let sData = super.getData();
-        let LightDataObject = game.settings.get("LightsHUD", this.lightType);
+        let sData;
+        let LightDataObject;
 
-        if(!(LightDataObject instanceof foundry.data.LightData)) {
-            LightDataObject =  new foundry.data.LightData();
+        console.debug(this.LHCONSTS.animationTypes.map( (value) => {
+            return value;
+        }));
+        try {
+            sData = super.getData();
+            LightDataObject = flattenObject(game.settings.get("LightsHUD", this.lightType));
+            if (isObjectEmpty(LightDataObject))
+                LightDataObject = flattenObject(new foundry.data.LightData());
+            return {sData,LightDataObject};
+
+        } catch (error) {
+            console.error("Error getting data for setting", error);
         }
-        console.debug(sData)
-        return {sData,LightDataObject};
+        
+        
     }
 
 
     ///** @override */
-    _updateObject(event, CustomLightData) {
-        //TODO repair LightData object Setting
-        game.settings.set("LightsHUD", this.lightType , CustomLightData);
+    async _updateObject(event, customLightData) {
+        try {
+            let updatedLightData = expandObject(customLightData);
+            return game.settings.set("LightsHUD", this.lightType , updatedLightData);    
+        } catch (error) {
+            console.error("Error updating setting", error);
+        }
     }
-
-    getExcludedProperties(){
-        return this.excludedProperties;
-    }
-
-    
     
 }
 
-Handlebars.registerHelper('expandObject', function(object) {
-
-    if (typeof object !== 'object')
-        return;
-
-    function iterateObject (object){
-        let htmlValue = "";
-        for (const [key,value] of Object.entries(object)){
-            if (typeof value === 'object'){
-                htmlValue += ` <fieldset><legend>${key}</legend>
-                               ${iterateObject(value)}
-                               </fieldset>`;
-                
-                continue;
-            }
-            htmlValue += `<label for="${key}">${key}</label>`;
-            if (key === "color"){
-                htmlValue += `<input class="line" name="${key}" type=text value="${value}"></input>`;
-                continue;
-            }
-            htmlValue += `<input class="line" name="${key}" type=text value="${value}"></input>`;
-        };
-        console.log(htmlValue)
-        return htmlValue;
-    }
+Handlebars.registerHelper('type', function(value) {
     
-    return iterateObject(object);
+    try{
+        switch(typeof value){
+            case "boolean" : {}
+            case "string" : {}
+            case "number" : {}
+            case "boolean" : {}
+            case "boolean" : {}
+            default: return;       
+        }
+  
+    }    
+    catch (error) { console.error("Error in determining Type of value: ",error); }
+    
+    
 });
 
 export class LightSub extends LightsHUDMenuSettings{
