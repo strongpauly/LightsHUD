@@ -1,30 +1,12 @@
 <form id="CustomLightData" name="CustomLightData" autocomplete="off" onsubmit="event.preventDefault();">
     <div class="flexcol flex0">
-        <h3>LightData Values<h3>
-            {{#each this.LightDataObject as |value key|}}
-            <label for="{{key}}">{{key}}</label> <input class="line" name="{{key}}" type=text value="{{value}}">
-            {{/each}}
+        <fieldset class="submenuFieldset">
+            <legend>{{this.sData.title}}</legend>
+            {{#expandObject this.LightDataObject}}{{/expandObject}}
+            </fieldset>
         </p>
     </div>
-    <div class="flexcol flex1">
-        <form name="animation" id="animation">
-        <fieldset>
-        <legend>Animation</legend>
-            {{#each this.animation as |value key|}}
-               <label for="{{key}}">{{key}}</label> <input class="line" name="{{key}}" type=text value="{{value}}">
-            {{/each}}
-        </fieldset>
-        </form>
-    </div>
-    <div class="flexcol flex1">
-        <form name="darkness" id="darkness">
-        <fieldset>
-            <legend>Darkness</legend>
-            {{#each this.darkness as |value key|}}
-                 <label for="{{key}}">{{key}}</label><input class="line" name="{{key}}" type=text value="{{value}}">
-            {{/each}}
-        </fieldset></form>
-    </div>
+
     <div class='flexrow'>    
         <button class='reset' type="reset" data-action="reset"><i class="fas fa-trash-restore"></i>Reset</button>
         <button class='submit' type="submit" data-action="submit"><i class="fas fa-check"></i>Submit</button>

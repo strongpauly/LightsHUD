@@ -59,3 +59,7 @@
 	color: #555;
 	pointer-events: none;
 }
+
+.submenuFieldset{
+	border:0;
+}

@@ -1,7 +1,8 @@
 // Setting Menu for the custom lightData values.
 export class LightsHUDMenuSettings extends FormApplication {
     lightType;
-
+    
+    
     constructor(lightType){
         super();
         this.lightType = lightType ?? "";
@@ -9,13 +10,13 @@ export class LightsHUDMenuSettings extends FormApplication {
 
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.id = "LightsHUD Custom values";
+        options.id = "LightsHUDSubmenu";
         options.template = "modules/LightsHUD/templates/LightsHUDSettingsSubmenu.html";
         options.width = 500;
         return options;
     }
       get title() {
-        return game.i18n.localize('LightsHUD Custom LightData Form');
+        return game.i18n.localize(`${this.lightType} Default Values`);
     }
 
     activateListeners(html) {
@@ -27,9 +28,6 @@ export class LightsHUDMenuSettings extends FormApplication {
                     game.settings.set("LightsHUD", this.lightType , {});
                     this.close();
             }
-            // if (event.currentTarget?.dataset?.action === 'submit'){
-            //     this._updateObject()
-            // }
         });
     }
 
@@ -39,39 +37,59 @@ export class LightsHUDMenuSettings extends FormApplication {
 
     ///** @override */
     getData() {
-        let sData = super.getData().object;
+        let sData = super.getData();
         let LightDataObject = game.settings.get("LightsHUD", this.lightType);
 
-        if (!this.isLightData(LightDataObject)) {
+        if(!(LightDataObject instanceof foundry.data.LightData)) {
             LightDataObject =  new foundry.data.LightData();
         }
-
-        let animation = LightDataObject.animation;
-        delete LightDataObject.animation;
-        let darkness = LightDataObject.darkness;
-        delete LightDataObject.darkness;
-
-        return {sData,LightDataObject,animation,darkness};
+        console.debug(sData)
+        return {sData,LightDataObject};
     }
 
-    isLightData(LightDataObject) {
-        if ("bright" in LightDataObject && "animation" in LightDataObject && "darkness" in LightDataObject)
-            return true;
-        return false;
-    }
 
     ///** @override */
-    _updateObject(event, CustomLightData, darkness, animation) {
-        let modifiedObject = mergeObject(CustomLightData, animation, darkness);
+    _updateObject(event, CustomLightData) {
+        //TODO repair LightData object Setting
         game.settings.set("LightsHUD", this.lightType , CustomLightData);
     }
 
+    getExcludedProperties(){
+        return this.excludedProperties;
+    }
+
+    
     
 }
 
-Handlebars.registerHelper('isObject', function (value) {
-    return typeof(value) != {};
-})
+Handlebars.registerHelper('expandObject', function(object) {
+
+    if (typeof object !== 'object')
+        return;
+
+    function iterateObject (object){
+        let htmlValue = "";
+        for (const [key,value] of Object.entries(object)){
+            if (typeof value === 'object'){
+                htmlValue += ` <fieldset><legend>${key}</legend>
+                               ${iterateObject(value)}
+                               </fieldset>`;
+                
+                continue;
+            }
+            htmlValue += `<label for="${key}">${key}</label>`;
+            if (key === "color"){
+                htmlValue += `<input class="line" name="${key}" type=text value="${value}"></input>`;
+                continue;
+            }
+            htmlValue += `<input class="line" name="${key}" type=text value="${value}"></input>`;
+        };
+        console.log(htmlValue)
+        return htmlValue;
+    }
+    
+    return iterateObject(object);
+});
 
 export class LightSub extends LightsHUDMenuSettings{
     constructor(){
