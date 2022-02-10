@@ -2,10 +2,10 @@
     <div class="flexcol">
         {{#each this.LightDataObject as |value key|}}
             <label for="{{key}}">{{key}}</label>
-            <input name="{{key}}" type="{{#type value}}{{/type}}" value="{{value}}">
-            
-            </input>
+                <input name="{{key}}" type="text" value="{{value}}" {{#hasOptions key}}{{/hasOptions}} />
         {{/each}}
+        <h5>Possible options for Animation Type: (18) ['torch', 'pulse', 'chroma', 'wave', 'fog', 'sunburst', 'dome', 'emanation', 'hexa', 'ghost', 'energy', 'roiling', 'hole', 'vortex', 'witchwave', 'rainbowswirl', 'radialrainbow', 'fairy']
+        </h5>
     </div>
     <div class='flexrow'>    
         <button class='reset' type="reset" data-action="reset"><i class="fas fa-trash-restore"></i>Reset</button>

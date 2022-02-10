@@ -1,5 +1,4 @@
 import { LightDataExt } from "./LightDataExt.js";
-// import { LightData } from foundry.data.LightData;
 import { tokenInformations } from "./tokenInformations.js";
 import * as LightsHUDSubs from "./LightsHUDMenuSettings.js";
 class LightsHUD {
@@ -45,10 +44,9 @@ class LightsHUD {
     html.find(".LightsHUD-container").prepend(buttonsdiv);
 
     // Get the status of the three types of lights
-
-    let spellLight = new LightDataExt("light", "spell", false, app);
-    let lanternLight = new LightDataExt("lantern", "consumable", false, app);
-    let torchLight = new LightDataExt("torch", "consumable", false, app);
+    let lightSpell = new LightDataExt("light", "Spell", false, app);
+    let lanternLight = new LightDataExt("lantern", "Light", false, app);
+    let torchLight = new LightDataExt("torch", "Light", false, app);
 
     let tokenD = app.object.document;
    
@@ -56,7 +54,7 @@ class LightsHUD {
     let consumptionCheck = game.settings.get("LightsHUD","consumeItem");
       
     // Initial button state when the HUD comes up
-    if (spellLight.state)   tbuttonLight.addClass("active");
+    if (lightSpell.state)   tbuttonLight.addClass("active");
     if (lanternLight.state) tbuttonLantern.addClass("active");
     if (torchLight.state)   tbuttonTorch.addClass("active");
     // Check the permissions to manage the lights
@@ -68,7 +66,7 @@ class LightsHUD {
       return;
     }
       // If the a specific light is on, enable only that light otherwise enable all three of them
-      if (spellLight.state) {
+      if (lightSpell.state) {
         enableLightsHUDButton(tbuttonLight);
         disableLightsHUDButton(tbuttonLantern);
         disableLightsHUDButton(tbuttonTorch);
@@ -201,11 +199,11 @@ class LightsHUD {
       // Are we dealing with the Light Button
       if (tbutton.hasClass("lightSpell")) {
         // Check if the token has the light spell on
-        if (spellLight.state) {
+        if (lightSpell.state) {
           LightsHUD.log("Turn Off")
           // The token has the light spell on
-          spellLight.state = false;
-          await tokenD.setFlag("LightsHUD", spellLight._getFlagName(), false);
+          lightSpell.state = false;
+          await tokenD.setFlag("LightsHUD", lightSpell._getFlagName(), false);
           tbuttonLight.removeClass("active");
           // Light is inactive, enable the relevant light sources according to parameters
           enableButtonsPerSettings();
@@ -215,8 +213,8 @@ class LightsHUD {
         } else {
           LightsHUD.log("Turn On")
           // The token does not have the light spell on
-          spellLight.state = true;
-          await tokenD.setFlag("LightsHUD", spellLight._getFlagName(), true);
+          lightSpell.state = true;
+          await tokenD.setFlag("LightsHUD", lightSpell._getFlagName(), true);
           tbuttonLight.addClass("active");
           // Light is active, disable the other light sources
           disableLightsHUDButton(tbuttonLantern);
@@ -226,8 +224,8 @@ class LightsHUD {
           // Enable the Light Source according to the type
           // "torch" / "pulse" / "chroma" / "wave" / "fog" / "sunburst" / "dome"
           // "emanation" / "hexa" / "ghost" / "energy" / "roiling" / "hole"
-          
-          let lightDataObject = tokenD.getFlag("LightsHUD","previousLightData") ?? LightsHUD.getLightDataFromSettings("lightspell");
+          //TODO fix lighting from HUD
+          let lightDataObject = lightSpell.getDefault();
           updateTokenLighting(lightDataObject);
           }
       }
@@ -728,9 +726,7 @@ class LightsHUD {
               }
       }
     }
-      
-    
-    
+ 
     // Update the relevant light parameters of a token
     function updateTokenLighting(lightDataObject){
       app.object.document.update({lightData:{lightDataObject}});
@@ -954,7 +950,7 @@ Hooks.once("init", async () => {
     restricted: true
   });
 
-  await game.settings.register("LightsHUD", "lightspell", {
+  await game.settings.register("LightsHUD", "lightSpell", {
     name: game.i18n.localize("LightsHUD.lightBrightRadius.name"),
     hint: game.i18n.localize("LightsHUD.lightBrightRadius.hint"),
     scope: "world",
