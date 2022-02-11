@@ -1,3 +1,4 @@
+'use strict';
 import { LightDataExt } from "./LightDataExt.js";
 import { tokenInformations } from "./tokenInformations.js";
 import * as LightsHUDSubs from "./LightsHUDMenuSettings.js";
@@ -225,7 +226,9 @@ class LightsHUD {
           // "torch" / "pulse" / "chroma" / "wave" / "fog" / "sunburst" / "dome"
           // "emanation" / "hexa" / "ghost" / "energy" / "roiling" / "hole"
           //TODO fix lighting from HUD
+         
           let lightDataObject = lightSpell.getDefault();
+
           updateTokenLighting(lightDataObject);
           }
       }
@@ -728,37 +731,12 @@ class LightsHUD {
     }
  
     // Update the relevant light parameters of a token
-    function updateTokenLighting(lightDataObject){
-      app.object.document.update({lightData:{lightDataObject}});
+   async function updateTokenLighting(lightDataObject){
+      
+     await app.object.document.update({"light":lightDataObject});
       LightsHUD.log("Update token with LightData")
       LightsHUD.log(lightDataObject)
     }
-
-    // function updateTokenLighting(
-    //   bright,
-    //   dim,
-    //   lightColor,
-    //   colorIntensity,
-    //   angle,
-    //   animationType,
-    //   animationSpeed,
-    //   animationIntensity
-    // ) {
-    //   app.object.document.update({
-    //     light: {
-    //       bright: bright,
-    //       dim: dim,
-    //       alpha: colorIntensity ** 2,
-    //       color: lightColor,
-    //       angle: angle,
-    //       animation: {
-    //         type: animationType,
-    //         speed: animationSpeed,
-    //         intensity: animationIntensity,
-    //       },
-    //     },
-    //   });
-    // }
 
     // Store the initial status of illumination for the token to restore if all light sources are extinguished
     async function storeTokenLighting() {

@@ -1,11 +1,10 @@
-<form id="CustomLightData" name="CustomLightData" autocomplete="off" onsubmit="event.preventDefault();">
+<form class="form-group" id="CustomLightData" name="CustomLightData" autocomplete="off" onsubmit="event.preventDefault();">
     <div class="flexcol">
         {{#each this.LightDataObject as |value key|}}
             <label for="{{key}}">{{key}}</label>
-                <input name="{{key}}" type="text" value="{{value}}" {{#hasOptions key}}{{/hasOptions}} />
+                <input name="{{key}}" type="{{#type key}}{{/type}}" value="{{value}}" {{#hasOptions key}}{{/hasOptions}} />
         {{/each}}
-        <h5>Possible options for Animation Type: (18) ['torch', 'pulse', 'chroma', 'wave', 'fog', 'sunburst', 'dome', 'emanation', 'hexa', 'ghost', 'energy', 'roiling', 'hole', 'vortex', 'witchwave', 'rainbowswirl', 'radialrainbow', 'fairy']
-        </h5>
+        <p>Possible options for Animation Type: {{this.animTypes}}</p>
     </div>
     <div class='flexrow'>    
         <button class='reset' type="reset" data-action="reset"><i class="fas fa-trash-restore"></i>Reset</button>

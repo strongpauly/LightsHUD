@@ -1,8 +1,8 @@
 // Setting Menu for the custom lightData values.
 import { LightsHUDConsts } from "./consts.js";
+const LHCONSTS = LightsHUDConsts;
 export class LightsHUDMenuSettings extends FormApplication {
   lightType;
-  LHCONSTS = new LightsHUDConsts();
 
   constructor(lightType) {
     super();
@@ -15,7 +15,7 @@ export class LightsHUDMenuSettings extends FormApplication {
     options.id = "LightsHUDSubmenu";
     options.template =
       "modules/LightsHUD/templates/LightsHUDSettingsSubmenu.html";
-    options.width = 350;
+    options.width = 400;
     return options;
   }
   get title() {
@@ -37,10 +37,10 @@ export class LightsHUDMenuSettings extends FormApplication {
     this.lightType = type;
   }
 
-  ///** @override */
   getData() {
     let sData;
     let LightDataObject;
+    let animTypes = LHCONSTS.animationTypes.toString();
    
     try {
       sData = super.getData();
@@ -49,7 +49,7 @@ export class LightsHUDMenuSettings extends FormApplication {
       );
       if (isObjectEmpty(LightDataObject))
         LightDataObject = flattenObject(new foundry.data.LightData());
-      return { sData, LightDataObject };
+      return { sData, LightDataObject, animTypes };
     } catch (error) {
       console.error("Error getting data for setting", error);
     }
@@ -68,21 +68,9 @@ export class LightsHUDMenuSettings extends FormApplication {
 //TODO Improve Setting Form
 // This helper will help in defining the input types.
 Handlebars.registerHelper("type", function (value) {
-  try {
-    switch (typeof value) {
-      case "boolean": {
-      }
-      case "string": {
-      }
-      case "number": {
-      }
-      case "boolean": {
-      }
-      case "boolean": {
-      }
-      default:
-        return;
-    }
+  try{
+      return LHCONSTS.LightDataPropToInputType[value];
+      
   } catch (error) {
     console.error("Error in determining Type of value: ", error);
   }
@@ -93,7 +81,7 @@ Handlebars.registerHelper("hasOptions", function (value) {
     if (value === "color")
       return `is="colorpicker-input" data-responsive-color placeholder="Click me to select color" `;
     if (value === "animation.type")
-      return `placeholder="Refer to the available types at the bottom of this window." `;
+      return `placeholder="Refer to the available types at the bottom of this window."`;
   } catch (error) {
     console.error("Error in determining Type of value: ", error);
   }
